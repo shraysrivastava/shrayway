@@ -3,13 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title id="page-title">DJ</title>
-<meta name="description" id="page-desc" content="">
+<title id="page-title">shrayway — dj</title>
+<meta name="description" id="page-desc" content="shrayway — dj in chicago. upcoming shows, live sets and mixes.">
+<link rel="canonical" href="https://shrayway.com/">
 
-<meta property="og:title" content="" id="og-title">
-<meta property="og:description" content="" id="og-desc">
+<!-- Share previews must be static: iMessage, WhatsApp and Instagram read the
+     raw HTML and never run JavaScript, so anything filled in by script is
+     invisible to them. Update these by hand if the name or city changes. -->
+<meta property="og:title" content="shrayway">
+<meta property="og:description" content="dj · chicago — upcoming shows, live sets and mixes">
 <meta property="og:type" content="website">
-<meta property="og:image" content="" id="og-image">
+<meta property="og:url" content="https://shrayway.com/">
+<meta property="og:site_name" content="shrayway">
+<meta property="og:image" content="https://shrayway.com/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="shrayway djing">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="shrayway">
+<meta name="twitter:description" content="dj · chicago — upcoming shows, live sets and mixes">
+<meta name="twitter:image" content="https://shrayway.com/og.jpg">
+
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="theme-color" content="#0a0612">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1200,15 +1218,11 @@
   const render = (config) => {
     const app = document.getElementById("app");
 
-    // Meta tags
-    const desc = `${config.name} · ${config.city}`;
+    // Tab title tracks config; the og: tags are static in the head because
+    // crawlers don't run this script.
     document.getElementById("page-title").textContent = `${config.name} — dj`;
-    document.getElementById("page-desc").setAttribute("content", desc);
-    document.getElementById("og-title").setAttribute("content", config.name);
-    document.getElementById("og-desc").setAttribute("content", desc);
-    if (config.bannerImage) {
-      document.getElementById("og-image").setAttribute("content", config.bannerImage);
-    }
+    document.getElementById("page-desc")
+      .setAttribute("content", `${config.name} · ${config.city}`);
 
     const { first, second, joined } = splitName(config.name);
 
