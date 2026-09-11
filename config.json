@@ -1,0 +1,64 @@
+{
+  "name": "shrayway",
+  "city": "chicago",
+  "bannerImage": "banner.jpg",
+
+  "socials": [
+    "https://instagram.com/shraywayy",
+    "https://on.soundcloud.com/x0uXkzCw1Pso115EqD",
+    "https://www.youtube.com/@shraywayy"
+  ],
+
+  "gigs": [
+    {
+      "date": "2026-03-14",
+      "title": "Saint Patty's Green Line",
+      "venue": "Parlay Lincoln Park",
+      "meta": "Chicago"
+    },
+    {
+      "date": "2026-05-24",
+      "title": "Navy Pier Rooftop MDW",
+      "venue": "Offshore Rooftop",
+      "meta": "Navy Pier · Chicago",
+      "setUrl": "https://youtu.be/o_GSxeNiZIs"
+    },
+    {
+      "date": "2026-05-28",
+      "title": "Mom's House Open Decks",
+      "venue": "Mom's House",
+      "meta": "Chicago"
+    },
+    {
+      "date": "2026-06-05",
+      "title": "Back Room Sessions",
+      "venue": "Mosaic",
+      "meta": "Chicago"
+    },
+    {
+      "date": "2026-10-30",
+      "title": "Navy Pier Rooftop Halloweekend",
+      "venue": "Offshore Rooftop",
+      "meta": "Navy Pier · Chicago",
+      "url": "https://posh.vip/f/d140e?t=shray-srivastava",
+      "cta": "tickets"
+    },
+    {
+      "date": "2026-10-31",
+      "teaser": true,
+      "meta": "Halloween night · not announced yet"
+    }
+  ],
+
+  "mixes": [
+    {
+      "title": "House/Tech House Flow State V1",
+      "sub": "soundcloud",
+      "url": "https://soundcloud.com/shray-srivastava-944239990/flow-state-v1?si=379d9d3831fa41f68c17aab5b49f51ef&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing"
+    }
+  ],
+
+  "booking": {
+    "email": "shray.srivastava3@gmail.com"
+  }
+}

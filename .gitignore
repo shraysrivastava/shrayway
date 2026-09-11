@@ -1,0 +1,5 @@
+.DS_Store
+.claude/settings.local.json
+
+# internal planning notes — kept out of the public repo
+PLAN.MD
