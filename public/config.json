@@ -24,29 +24,25 @@
       "setUrl": "https://youtu.be/o_GSxeNiZIs"
     },
     {
-      "date": "2026-05-28",
-      "title": "Mom's House Open Decks",
-      "venue": "Mom's House",
-      "meta": "Chicago"
-    },
-    {
-      "date": "2026-06-05",
-      "title": "Back Room Sessions",
-      "venue": "Mosaic",
-      "meta": "Chicago"
-    },
-    {
       "date": "2026-10-30",
-      "title": "Navy Pier Rooftop Halloweekend",
+      "title": "Halloween on the Pier",
       "venue": "Offshore Rooftop",
-      "meta": "Navy Pier · Chicago",
+      "meta": "Navy Pier",
+      "doors": "8PM",
       "url": "https://posh.vip/e/offshore-halloween-1030?t=shray-srivastava",
-      "cta": "tickets"
+      "cta": "tickets",
+      "pinned": true,
+      "series": "halloweekend"
     },
     {
       "date": "2026-10-31",
-      "teaser": true,
-      "meta": "Halloween night · not announced yet"
+      "title": "Azure After Dark",
+      "venue": "Icon Chicago",
+      "doors": "10PM",
+      "url": "https://posh.vip/e/azure-presents-azure-after-dark-halloween-edition-1031?t=shray-srivastava",
+      "cta": "tickets",
+      "pinned": true,
+      "series": "halloweekend"
     }
   ],
 

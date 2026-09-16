@@ -50,74 +50,6 @@
     --line-strong: rgba(216, 180, 254, 0.18);
   }
 
-  /* ============================================================
-     OCTOBER — ember palette. Same structure, warmer accents; the
-     violet never fully leaves, which is what keeps it off the
-     Halloween-clipart end of the spectrum.
-     Turns itself on Oct 1 and off Nov 1 (see applySeasonalTheme).
-     ============================================================ */
-  [data-theme="halloween"] {
-    --ink: #0a0609;
-    --ink-soft: #1c1016;
-    --bone: #f5ece6;
-    --bone-dim: #d9c6b8;
-    --bone-faint: #a08a7d;
-    --violet: #ff6b1a;
-    --violet-deep: #7c2d12;
-    --magenta: #b91c1c;
-    --glow: #ffb366;
-    --line: rgba(255, 179, 102, 0.08);
-    --line-strong: rgba(255, 179, 102, 0.20);
-  }
-
-  [data-theme="halloween"] body::before {
-    background:
-      radial-gradient(ellipse 90% 60% at 50% -5%, rgba(255, 107, 26, 0.20), transparent 55%),
-      radial-gradient(ellipse 70% 50% at 80% 100%, rgba(124, 45, 18, 0.22), transparent 60%),
-      radial-gradient(ellipse 60% 40% at 15% 70%, rgba(109, 40, 217, 0.10), transparent 60%);
-  }
-
-  /* the existing film grain, drifting — fog without adding an element */
-  [data-theme="halloween"] body::after {
-    opacity: 0.09;
-    animation: drift 26s ease-in-out infinite alternate;
-  }
-
-  @keyframes drift {
-    from { transform: translate3d(-2%, -1.5%, 0) scale(1.06); }
-    to   { transform: translate3d(2%, 1.5%, 0) scale(1.10); }
-  }
-
-  [data-theme="halloween"] .pinned {
-    background: linear-gradient(180deg, rgba(255, 107, 26, 0.13), rgba(255, 107, 26, 0.02));
-  }
-
-  /* the live dot stops breathing and starts flickering like a bad tube */
-  [data-theme="halloween"] .pulse {
-    animation: flicker 5s linear infinite;
-    box-shadow: 0 0 10px 2px rgba(255, 107, 26, 0.55);
-  }
-
-  @keyframes flicker {
-    0%, 100%      { opacity: 1; }
-    2%            { opacity: 0.25; }
-    4%            { opacity: 1; }
-    22%           { opacity: 1; }
-    24%           { opacity: 0.4; }
-    25%           { opacity: 1; }
-    26%           { opacity: 0.3; }
-    28%           { opacity: 1; }
-    62%           { opacity: 1; }
-    64%           { opacity: 0.5; }
-    66%           { opacity: 1; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    [data-theme="halloween"] body::after { animation: none; }
-    [data-theme="halloween"] .pulse { animation: none; }
-    .redacted::after { animation: none; }
-  }
-
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   html { -webkit-font-smoothing: antialiased; text-size-adjust: 100%; }
 
@@ -327,17 +259,104 @@
 
   /* ---- up next hero ---- */
 
+  /* Hero gigs render as a ticket: a tear-off date stub beside the details.
+     Flat fills only — an earlier gradient version read as a generic
+     AI-generated card, so keep gradients off this component. */
   .pinned {
+    --stub-w: 78px;
+    --notch: 9px;
     border: 1px solid var(--line-strong);
-    background: linear-gradient(180deg, rgba(168, 85, 247, 0.12), rgba(168, 85, 247, 0.02));
-    padding: 24px 22px;
+    background: rgba(168, 85, 247, 0.09);
+    padding: 0;
     position: relative;
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
     transition: transform 0.3s ease, border-color 0.3s ease;
     opacity: 0;
     animation: rise 0.7s ease forwards;
+    /* punch real holes at each end of the perforation */
+    -webkit-mask-image:
+      radial-gradient(circle var(--notch) at var(--stub-w) 0, transparent 98%, #000 100%),
+      radial-gradient(circle var(--notch) at var(--stub-w) 100%, transparent 98%, #000 100%);
+    mask-image:
+      radial-gradient(circle var(--notch) at var(--stub-w) 0, transparent 98%, #000 100%),
+      radial-gradient(circle var(--notch) at var(--stub-w) 100%, transparent 98%, #000 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  .stub {
+    position: relative;
+    flex: 0 0 var(--stub-w);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    padding: 16px 0;
+    background: rgba(168, 85, 247, 0.10);
+    border-right: 1px dashed var(--line-strong);
+    overflow: hidden;
+  }
+
+  /* paper stock: the same film grain the page already uses, held still */
+  .stub::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.85 0 0 0 0 0.7 0 0 0 0 1 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.13;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+  }
+
+  .stub-month {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: var(--glow);
+    text-indent: 0.22em;
+  }
+
+  .stub-day {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 42px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--bone);
+  }
+
+  .stub-doors {
+    margin-top: 5px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.14em;
+    color: var(--bone-faint);
+    white-space: nowrap;
+  }
+
+  .ticket-body {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 18px;
+  }
+
+  /* co-headlining gigs: equal height regardless of title length, CTAs aligned */
+  .heroes {
+    display: grid;
+    grid-auto-rows: 1fr;
+    gap: 12px;
+  }
+
+  .heroes .pinned-cta {
+    margin-top: auto;
+    align-self: flex-start;
   }
 
   .pinned:active { transform: scale(0.99); }
@@ -393,6 +412,7 @@
   }
 
   .pinned-cta {
+    white-space: nowrap;
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
     letter-spacing: 0.14em;
@@ -736,10 +756,6 @@
     vertical-align: middle;
   }
 
-  [data-theme="halloween"] .redacted {
-    background: rgba(255, 179, 102, 0.16);
-  }
-
   .redacted::after {
     content: "";
     position: absolute;
@@ -902,8 +918,15 @@
 
   @media (max-width: 380px) {
     .content { padding: 0 20px; }
-    .pinned { padding: 20px 18px; }
-    .pinned-title { font-size: 25px; }
+    /* the ticket keeps padding: 0 — the stub must stay flush to the edge.
+       Shrink the stub instead so the title keeps usable width. */
+    .pinned { --stub-w: 68px; --notch: 8px; }
+    .ticket-body { padding: 16px 16px 15px; }
+    .stub { padding: 14px 0; }
+    .stub-day { font-size: 35px; }
+    .stub-month { font-size: 9px; }
+    .stub-doors { font-size: 7px; letter-spacing: 0.1em; }
+    .pinned-title { font-size: 23px; }
     .link-title, .gig-venue { font-size: 17px; }
     .gig-date { width: 46px; padding-right: 12px; }
     .gig-day { font-size: 22px; }
@@ -1014,20 +1037,6 @@
     return el("span", { class: `price-tag ${isFree ? "free" : "paid"}` },
       isFree ? "free" : trimmed
     );
-  };
-
-  // October dresses the site up by itself: on Oct 1, off when the last
-  // Halloween-night gig drops off the page (Nov 1, same 5 AM cutoff).
-  // While working on it: ?theme=halloween forces it on, ?theme=none forces it off.
-  const applySeasonalTheme = () => {
-    const override = new URLSearchParams(location.search).get("theme");
-    if (override === "none") return;
-    const now = new Date();
-    const y = now.getFullYear();
-    const inSeason = now >= new Date(y, 9, 1) && now < new Date(y, 10, 1, CUTOFF_HOUR);
-    if (override === "halloween" || inSeason) {
-      document.documentElement.dataset.theme = "halloween";
-    }
   };
 
   // Optional "setTime" on a gig — usually added the week of, once it's known
@@ -1269,25 +1278,41 @@
     const gigs = config.gigs || [];
     const upcoming = gigs.filter(g => isUpcoming(g.date)).sort((a, b) => a.date.localeCompare(b.date));
     const past = gigs.filter(g => !isUpcoming(g.date)).sort((a, b) => b.date.localeCompare(a.date));
-    // A teaser has nothing to show in a hero card, so the hero is always a real gig
-    const pinnedGig = upcoming.find(g => g.pinned && !g.teaser)
-      || upcoming.find(g => !g.teaser)
-      || null;
-    const restUpcoming = upcoming.filter(g => g !== pinnedGig);
+    // Every pinned gig gets a full hero card (equal billing); with none pinned,
+    // the soonest gig is the lone hero. Teasers have nothing to show, so never heroes.
+    const pinnedGigs = upcoming.filter(g => g.pinned && !g.teaser);
+    const soonest = upcoming.find(g => !g.teaser);
+    const heroGigs = pinnedGigs.length ? pinnedGigs : (soonest ? [soonest] : []);
+    const restUpcoming = upcoming.filter(g => !heroGigs.includes(g));
     // Past gigs survive only as live sets — a recording is what keeps them on the page
     const liveSets = past.filter(g => g.setUrl);
 
     let animDelay = 0.7;
 
+    // When every upcoming gig belongs to one series (e.g. "halloweekend"), the
+    // section takes that name; once they pass it reverts to "up next" by itself.
+    const shared = (key) => upcoming.length && upcoming.every(g => g[key] && g[key] === upcoming[0][key])
+      ? upcoming[0][key] : null;
+    const series = shared("series");
+    const NIGHTS = ["night one", "night two", "night three", "night four"];
+
     // up next — hero card + remaining rows, or a quiet empty line
     {
       const sec = el("section", { class: "section" });
-      sec.appendChild(el("div", { class: "section-label", style: `animation-delay: ${animDelay}s` }, "up next"));
+      sec.appendChild(el("div", {
+        class: "section-label",
+        style: `animation-delay: ${animDelay}s`
+      }, series || "up next"));
 
-      if (pinnedGig) {
-        const g = pinnedGig;
+      const heroes = el("div", { class: "heroes" });
+      if (heroGigs.length) sec.appendChild(heroes);
+      heroGigs.forEach((g, i) => {
         const days = daysUntil(g.date);
-        const label = days === 0 ? "tonight" : days === 1 ? "tomorrow" : days <= 7 ? "this week" : "next show";
+        // tonight/tomorrow always win; otherwise a multi-night series gets equal
+        // "night one / night two" billing instead of "next show / coming up"
+        const label = days === 0 ? "tonight" : days === 1 ? "tomorrow"
+          : series && heroGigs.length > 1 && NIGHTS[i] ? NIGHTS[i]
+          : days <= 7 ? "this week" : i === 0 ? "next show" : "coming up";
         const attrs = { class: "pinned", style: `animation-delay: ${animDelay}s` };
         if (g.url) {
           attrs.href = g.url;
@@ -1295,29 +1320,43 @@
           attrs.rel = "noopener";
         }
         const pinned = el(g.url ? "a" : "div", attrs);
-        pinned.appendChild(el("div", { class: "pinned-label" },
+        const { month, day } = formatDate(g.date);
+
+        // Every hero is a ticket: tear-off date stub, then the details
+        const stub = el("div", { class: "stub" },
+          el("div", { class: "stub-month" }, month),
+          el("div", { class: "stub-day" }, day)
+        );
+        if (g.doors) stub.appendChild(el("div", { class: "stub-doors" }, `DOORS ${g.doors}`));
+        pinned.appendChild(stub);
+        const body = el("div", { class: "ticket-body" });
+        pinned.appendChild(body);
+
+        body.appendChild(el("div", { class: "pinned-label" },
           el("span", { class: "pulse" }),
           label
         ));
-        pinned.appendChild(el("div", { class: "pinned-title" }, g.title || g.venue));
+        body.appendChild(el("div", { class: "pinned-title" }, g.title || g.venue));
 
-        const { month, day } = formatDate(g.date);
-        const metaParts = [`${month} ${day}`];
+        // the stub already carries the date, so don't repeat it in the meta line
+        const metaParts = [];
         if (g.title && g.venue) metaParts.push(g.venue);
         if (g.meta) metaParts.push(g.meta);
         const metaLine = el("div", { class: "pinned-meta" });
-        metaLine.appendChild(el("span", {}, metaParts.join(" · ")));
+        if (metaParts.length) metaLine.appendChild(el("span", {}, metaParts.join(" · ")));
         const priceTag = renderPriceTag(g.price);
         if (priceTag) metaLine.appendChild(priceTag);
-        pinned.appendChild(metaLine);
+        if (metaLine.childNodes.length) body.appendChild(metaLine);
 
         const setTime = renderSetTime(g);
-        if (setTime) pinned.appendChild(el("div", { class: "set-time-line" }, setTime));
+        if (setTime) body.appendChild(el("div", { class: "set-time-line" }, setTime));
 
-        if (g.url) pinned.appendChild(el("div", { class: "pinned-cta" }, ctaLabel(g) + " →"));
-        sec.appendChild(pinned);
+        if (g.url) body.appendChild(el("div", { class: "pinned-cta" }, ctaLabel(g) + " →"));
+        heroes.appendChild(pinned);
         animDelay += 0.1;
-      } else if (!restUpcoming.length) {
+      });
+
+      if (!heroGigs.length && !restUpcoming.length) {
         sec.appendChild(el("div", {
           class: "empty",
           style: `animation-delay: ${animDelay}s`
@@ -1422,8 +1461,6 @@
     const app = document.getElementById("app");
     app.appendChild(el("div", { class: "error" }, msg));
   };
-
-  applySeasonalTheme();
 
   fetch("config.json?v=" + Date.now())
     .then(r => {
