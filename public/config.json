@@ -25,9 +25,8 @@
     },
     {
       "date": "2026-10-30",
-      "title": "Halloween on the Pier",
+      "title": "Navy Pier Rooftop",
       "venue": "Offshore Rooftop",
-      "meta": "Navy Pier",
       "doors": "8PM",
       "url": "https://posh.vip/e/offshore-halloween-1030?t=shray-srivastava",
       "cta": "tickets",
@@ -36,7 +35,7 @@
     },
     {
       "date": "2026-10-31",
-      "title": "Azure After Dark Halloween Edition",
+      "title": "Azure After Dark",
       "venue": "Icon Chicago",
       "doors": "10PM",
       "url": "https://posh.vip/e/azure-presents-azure-after-dark-halloween-edition-1031?t=shray-srivastava",
@@ -55,6 +54,7 @@
   ],
 
   "booking": {
+    "phone": "331-425-9141",
     "email": "shray.srivastava3@gmail.com"
   }
 }

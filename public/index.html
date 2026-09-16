@@ -40,7 +40,7 @@
     --ink-soft: #14102a;
     --bone: #f0ecf5;
     --bone-dim: #c4bcd9;
-    --bone-faint: #8a82a3;
+    --bone-faint: #9a92b5;
     --violet: #a855f7;
     --violet-deep: #6d28d9;
     --magenta: #c026d3;
@@ -329,7 +329,7 @@
   .stub-doors {
     margin-top: 5px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 8px;
+    font-size: 9px;
     letter-spacing: 0.14em;
     color: var(--bone-faint);
     white-space: nowrap;
@@ -407,6 +407,8 @@
     gap: 10px;
   }
 
+  /* Plain text, like the rest of the page — the underline and arrow carry the
+     affordance instead of a filled block. The whole ticket is the tap target. */
   .pinned-cta {
     white-space: nowrap;
     font-family: 'JetBrains Mono', monospace;
@@ -416,6 +418,15 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    margin-top: 14px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--line-strong);
+    transition: border-color 0.25s ease;
+  }
+
+  .pinned:active .pinned-cta { border-color: var(--glow); }
+  @media (hover: hover) {
+    .pinned:hover .pinned-cta { border-color: var(--glow); }
   }
 
   /* ---- media cards & link rows ---- */
@@ -779,52 +790,71 @@
     vertical-align: middle;
   }
 
-  /* ---- booking line ---- */
+  /* ---- booking: three ways to reach him, left-aligned like everything else ---- */
 
   .book {
     margin-top: 64px;
-    text-align: center;
     opacity: 0;
     animation: rise 0.6s ease forwards;
   }
 
-  .book-line {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: 19px;
-    color: var(--bone);
-    margin-bottom: 14px;
-  }
-
-  .book-email {
-    display: inline-flex;
+  .contact-row {
+    display: flex;
     align-items: center;
     gap: 12px;
-    flex-wrap: wrap;
-    justify-content: center;
+    min-height: 48px;
+    padding: 9px 4px;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.25s ease;
   }
 
-  .book-email a {
+  .contact-row:first-of-type { border-top: 1px solid var(--line); }
+
+  @media (hover: hover) {
+    .contact-row:hover { border-color: var(--line-strong); }
+    .contact-row:hover .contact-value { color: var(--glow); }
+  }
+
+  .contact-what {
+    flex: 0 0 46px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: var(--bone-faint);
+  }
+
+  .contact-value {
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--bone);
+    min-width: 0;
+    overflow-wrap: anywhere;
+    transition: color 0.25s ease;
+  }
+
+  /* email is the fallback of the three, so it sits quieter */
+  .contact-row--quiet .contact-value {
+    font-size: 11px;
+    color: var(--bone-dim);
+  }
+
+  .contact-go {
+    margin-left: auto;
+    flex-shrink: 0;
     font-family: 'JetBrains Mono', monospace;
     font-size: 12px;
-    letter-spacing: 0.06em;
     color: var(--glow);
-    text-decoration: none;
-    padding-bottom: 3px;
-    border-bottom: 1px solid var(--line-strong);
-    transition: border-color 0.25s ease;
-    user-select: text;
-    -webkit-user-select: text;
   }
-
-  .book-email a:active,
-  .book-email a:hover { border-color: var(--glow); }
 
   .copy-btn {
     width: 30px;
     height: 30px;
     padding: 5px;
+    margin-left: auto;
     border: none;
     border-radius: 4px;
     background: transparent;
@@ -835,7 +865,6 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    vertical-align: middle;
     position: relative;
   }
 
@@ -856,18 +885,6 @@
     .copy-btn:hover { color: var(--glow); background: rgba(168, 85, 247, 0.1); }
   }
   .copy-btn.copied { color: var(--green); }
-
-  .book-dm {
-    display: block;
-    margin-top: 14px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    letter-spacing: 0.14em;
-    color: var(--bone-faint);
-    text-decoration: none;
-    transition: color 0.25s ease;
-  }
-  .book-dm:hover { color: var(--glow); }
 
   .empty {
     font-family: 'Fraunces', serif;
@@ -921,7 +938,7 @@
     .stub { padding: 14px 0; }
     .stub-day { font-size: 35px; }
     .stub-month { font-size: 9px; }
-    .stub-doors { font-size: 7px; letter-spacing: 0.1em; }
+    .stub-doors { font-size: 8px; letter-spacing: 0.1em; }
     .pinned-title { font-size: 23px; }
     .link-title, .gig-venue { font-size: 17px; }
     .gig-date { width: 46px; padding-right: 12px; }
@@ -1220,14 +1237,40 @@
     return gig;
   };
 
+  // Copy-to-clipboard button; falls back to execCommand where the async API
+  // is unavailable (older iOS Safari, and any non-secure origin).
+  const copyButton = (text, label) => {
+    const btn = el("button", { class: "copy-btn", type: "button", "aria-label": label, html: ICONS.copy });
+    btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const done = () => {
+        btn.innerHTML = ICONS.check;
+        btn.classList.add("copied");
+        setTimeout(() => {
+          btn.innerHTML = ICONS.copy;
+          btn.classList.remove("copied");
+        }, 1800);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(done);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch (err) {}
+        document.body.removeChild(ta);
+        done();
+      }
+    });
+    return btn;
+  };
+
   const render = (config) => {
     const app = document.getElementById("app");
 
-    // Tab title tracks config; the og: tags are static in the head because
-    // crawlers don't run this script.
-    document.getElementById("page-title").textContent = `${config.name} — dj`;
-    document.getElementById("page-desc")
-      .setAttribute("content", `${config.name} · ${config.city}`);
+    // Title and description are static in the head — crawlers don't run this
+    // script, and scripting them here would silently override hand edits.
 
     const { first, second, joined } = splitName(config.name);
 
@@ -1401,46 +1444,44 @@
     }
 
     // wanna book me? — email (mailto + copy icon) + IG DM
-    if (config.booking && config.booking.email) {
-      const email = config.booking.email;
-      // detect IG URL from booking.instagram or socials array
-      const igUrl = config.booking.instagram
-        || (config.socials || []).find(u => /instagram\.com/i.test(u));
-
+    const booking = config.booking || {};
+    const igUrl = booking.instagram || (config.socials || []).find(u => /instagram\.com/i.test(u));
+    if (booking.phone || igUrl || booking.email) {
       const book = el("div", { class: "book", style: `animation-delay: ${animDelay}s` });
-      book.appendChild(el("div", { class: "book-line" }, "contact me"));
+      book.appendChild(el("div", { class: "section-label" }, "book me"));
 
-      const row = el("div", { class: "book-email" });
-      row.appendChild(el("a", { href: `mailto:${email}` }, email));
-
-      const copyBtn = el("button", { class: "copy-btn", type: "button", "aria-label": "copy email", html: ICONS.copy });
-      copyBtn.addEventListener("click", () => {
-        const reset = () => {
-          copyBtn.innerHTML = ICONS.copy;
-          copyBtn.classList.remove("copied");
-        };
-        const done = () => {
-          copyBtn.innerHTML = ICONS.check;
-          copyBtn.classList.add("copied");
-          setTimeout(reset, 1800);
-        };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(email).then(done).catch(done);
-        } else {
-          const ta = document.createElement("textarea");
-          ta.value = email;
-          document.body.appendChild(ta);
-          ta.select();
-          try { document.execCommand("copy"); } catch (e) {}
-          document.body.removeChild(ta);
-          done();
-        }
-      });
-      row.appendChild(copyBtn);
-      book.appendChild(row);
+      // text — tapping drafts a message rather than placing a call
+      if (booking.phone) {
+        const row = el("div", { class: "contact-row" });
+        row.appendChild(el("div", { class: "contact-what" }, "TEXT"));
+        row.appendChild(el("a", {
+          class: "contact-value",
+          href: `sms:${booking.phone.replace(/[^\d+]/g, "")}`
+        }, booking.phone));
+        row.appendChild(copyButton(booking.phone, "copy phone number"));
+        book.appendChild(row);
+      }
 
       if (igUrl) {
-        book.appendChild(el("a", { class: "book-dm", href: igUrl, target: "_blank", rel: "noopener" }, "dm on ig →"));
+        const handle = (igUrl.match(/instagram\.com\/([^/?#]+)/i) || [])[1];
+        book.appendChild(el("a", {
+          class: "contact-row", href: igUrl, target: "_blank", rel: "noopener"
+        },
+          el("div", { class: "contact-what" }, "DM"),
+          el("div", { class: "contact-value" }, handle ? `@${handle}` : "instagram"),
+          el("div", { class: "contact-go" }, "→")
+        ));
+      }
+
+      // a div, not a row-wide link: a <button> can't be nested inside an <a>
+      if (booking.email) {
+        const row = el("div", { class: "contact-row contact-row--quiet" });
+        row.appendChild(el("div", { class: "contact-what" }, "EMAIL"));
+        row.appendChild(el("a", {
+          class: "contact-value", href: `mailto:${booking.email}`
+        }, booking.email));
+        row.appendChild(copyButton(booking.email, "copy email address"));
+        book.appendChild(row);
       }
 
       content.appendChild(book);
