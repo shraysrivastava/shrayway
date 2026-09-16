@@ -156,33 +156,11 @@
   .header-block {
     position: relative;
     z-index: 3;
-    margin-top: -100px;
+    margin-top: -69px;
     padding: 0 24px;
     text-align: center;
     /* 37 not 44: the social row's 44px tap targets already add 7px below the icons */
     margin-bottom: 37px;
-  }
-
-  .mark {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    font-weight: 400;
-    letter-spacing: 0.32em;
-    color: var(--glow);
-    margin-bottom: 18px;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 0;
-    animation: rise 0.7s 0.4s ease forwards;
-  }
-
-  .mark::before, .mark::after {
-    content: "";
-    width: 16px;
-    height: 1px;
-    background: var(--glow);
-    opacity: 0.5;
   }
 
   h1 {
@@ -255,6 +233,24 @@
     padding-left: 4px;
     opacity: 0;
     animation: rise 0.6s ease forwards;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  /* series name sitting beside the section heading, e.g. "up next  halloweekend" */
+  .section-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-style: normal;
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: var(--glow);
+    padding: 3px 8px;
+    border: 1px solid var(--line-strong);
+    border-radius: 2px;
+    line-height: 1;
+    white-space: nowrap;
   }
 
   /* ---- up next hero ---- */
@@ -930,7 +926,7 @@
     .link-title, .gig-venue { font-size: 17px; }
     .gig-date { width: 46px; padding-right: 12px; }
     .gig-day { font-size: 22px; }
-    .header-block { margin-top: -90px; padding: 0 20px; }
+    .header-block { margin-top: -62px; padding: 0 20px; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1246,7 +1242,6 @@
 
     // Header — name + city + social icons
     const headerBlock = el("div", { class: "header-block" });
-    headerBlock.appendChild(el("div", { class: "mark" }, config.city));
     const h1 = el("h1");
     h1.appendChild(document.createTextNode(first));
     if (second) {
@@ -1299,10 +1294,12 @@
     // up next — hero card + remaining rows, or a quiet empty line
     {
       const sec = el("section", { class: "section" });
-      sec.appendChild(el("div", {
+      const upNextLabel = el("div", {
         class: "section-label",
         style: `animation-delay: ${animDelay}s`
-      }, series || "up next"));
+      }, "up next");
+      if (series) upNextLabel.appendChild(el("span", { class: "section-tag" }, series));
+      sec.appendChild(upNextLabel);
 
       const heroes = el("div", { class: "heroes" });
       if (heroGigs.length) sec.appendChild(heroes);
