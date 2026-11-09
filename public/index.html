@@ -221,7 +221,7 @@
   /* Rhythm carries the grouping: "up next" stands on its own, the two
      listening sections read as a pair, booking sits apart again. */
   .section--live { margin-top: 72px; }
-  .section--mixes { margin-top: 40px; }
+  .section--mashups, .section--mixes { margin-top: 40px; }
 
   .section-label {
     font-family: 'Fraunces', serif;
@@ -974,7 +974,7 @@
   //  socials: a plain list of profile URLs — the right icon is
   //  picked from the hostname (instagram / soundcloud / youtube).
   //
-  //  mixes: individual track/video links — SoundCloud and YouTube
+  //  mashups / mixes: individual track/video links — SoundCloud and YouTube
   //  URLs render inline players plus an "open in app" link.
   // ============================================================
 
@@ -1431,17 +1431,17 @@
       content.appendChild(sec);
     }
 
-    // mixes — individual tracks with inline players
-    const mixes = config.mixes || [];
-    if (mixes.length) {
-      const sec = el("section", { class: "section section--mixes" });
-      sec.appendChild(el("div", { class: "section-label", style: `animation-delay: ${animDelay}s` }, "mixes"));
-      mixes.forEach((m) => {
+    // mashups, then mixes — individual tracks with inline players
+    [["mashups", config.mashups], ["mixes", config.mixes]].forEach(([label, tracks]) => {
+      if (!tracks || !tracks.length) return;
+      const sec = el("section", { class: `section section--${label}` });
+      sec.appendChild(el("div", { class: "section-label", style: `animation-delay: ${animDelay}s` }, label));
+      tracks.forEach((m) => {
         sec.appendChild(mixItem(m, animDelay));
         animDelay += 0.08;
       });
       content.appendChild(sec);
-    }
+    });
 
     // wanna book me? — email (mailto + copy icon) + IG DM
     const booking = config.booking || {};
