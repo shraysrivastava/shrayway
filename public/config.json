@@ -44,11 +44,13 @@
       "series": "halloweekend"
     },
     {
-      "date": "2026-11-20",
-      "venue": "Bandit",
-      "meta": "West Loop · Chicago",
-      "setTime": "9–10 PM",
-      "price": "no cover"
+      "date": "2026-11-27",
+      "venue": "Joy District",
+      "meta": "Opening for DANNY",
+      "doors": "10PM",
+      "setTime": "10–11 PM",
+      "url": "https://speakeasygo.com/event/EVE-5L0279?t=Shrayway",
+      "cta": "tickets"
     }
   ],
 
