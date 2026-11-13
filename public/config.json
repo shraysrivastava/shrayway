@@ -50,7 +50,16 @@
       "doors": "10PM",
       "setTime": "10–11 PM",
       "url": "https://speakeasygo.com/event/EVE-5L0279?t=Shrayway",
-      "cta": "tickets"
+      "cta": "tickets",
+      "pinned": true
+    },
+    {
+      "date": "2026-12-12",
+      "title": "Twelve Bars of Xmas",
+      "code": "SHRAY",
+      "url": "http://tboxcrawl.com/",
+      "cta": "tickets",
+      "pinned": true
     }
   ],
 

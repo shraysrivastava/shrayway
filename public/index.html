@@ -343,10 +343,9 @@
     padding: 20px 20px 18px;
   }
 
-  /* co-headlining gigs: equal height regardless of title length, CTAs aligned */
+  /* stacked hero tickets — each sized to its own content */
   .heroes {
     display: grid;
-    grid-auto-rows: 1fr;
     gap: 12px;
   }
 
@@ -739,6 +738,37 @@
 
   .set-time-line { margin-bottom: 16px; }
 
+  /* discount code on a hero ticket — flat green coupon, dashed like a cut-out */
+  .promo {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    margin-bottom: 16px;
+    padding: 10px 12px;
+    border: 1px dashed var(--green);
+    border-radius: 2px;
+    background: rgba(134, 239, 172, 0.08);
+    color: var(--green);
+  }
+  .promo-label {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--bone);
+  }
+  .promo-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    letter-spacing: 0.18em;
+  }
+  .promo-note {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--bone-faint);
+  }
+
   /* compact variant inside the smaller gig rows */
   .gig-meta .set-time {
     font-size: 9px;
@@ -1053,13 +1083,19 @@
   };
 
   // Optional "setTime" on a gig — usually added the week of, once it's known
-  const renderSetTime = (g) => {
-    if (!g.setTime || !g.setTime.trim()) return null;
-    return el("span", { class: "set-time" },
-      el("em", {}, "set time"),
-      g.setTime.trim()
-    );
-  };
+  // labelled chip: set time, promo code
+  const chip = (label, value) => (value && value.trim())
+    ? el("span", { class: "set-time" }, el("em", {}, label), value.trim())
+    : null;
+  const renderSetTime = (g) => chip("set time", g.setTime);
+  const renderCode = (g) => chip("discount code", g.code);
+  // hero version: a coupon box, so the discount can't be missed
+  const renderPromo = (g) => (g.code && g.code.trim())
+    ? el("div", { class: "promo" },
+        el("span", { class: "promo-label" }, "save with code"),
+        el("span", { class: "promo-code" }, g.code.trim()),
+        el("span", { class: "promo-note" }, "at checkout"))
+    : null;
 
   // CTA derived from price: free -> rsvp, priced -> tickets.
   // Optional "cta" field on the gig overrides.
@@ -1226,6 +1262,8 @@
     if (metaParts.length) metaLine.appendChild(el("span", {}, metaParts.join(" · ")));
     const setTime = renderSetTime(g);
     if (setTime) metaLine.appendChild(setTime);
+    const code = renderCode(g);
+    if (code) metaLine.appendChild(code);
     const priceTag = renderPriceTag(g.price);
     if (priceTag) metaLine.appendChild(priceTag);
     if (metaLine.childNodes.length) info.appendChild(metaLine);
@@ -1390,6 +1428,8 @@
 
         const setTime = renderSetTime(g);
         if (setTime) body.appendChild(el("div", { class: "set-time-line" }, setTime));
+        const promo = renderPromo(g);
+        if (promo) body.appendChild(promo);
 
         if (g.url) body.appendChild(el("div", { class: "pinned-cta" }, ctaLabel(g) + " →"));
         heroes.appendChild(pinned);
