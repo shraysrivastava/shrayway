@@ -343,6 +343,8 @@
     padding: 20px 20px 18px;
   }
 
+  #up-next { scroll-margin-top: 16px; }
+
   /* stacked hero tickets — each sized to its own content */
   .heroes {
     display: grid;
@@ -1374,7 +1376,7 @@
 
     // up next — hero card + remaining rows, or a quiet empty line
     {
-      const sec = el("section", { class: "section" });
+      const sec = el("section", { class: "section", id: "up-next" });
       const upNextLabel = el("div", {
         class: "section-label",
         style: `animation-delay: ${animDelay}s`
@@ -1533,6 +1535,16 @@
     footer.appendChild(el("span", { class: "divider" }));
     footer.appendChild(document.createTextNode(`© ${new Date().getFullYear()} ${config.name}`));
     content.appendChild(footer);
+
+    // Phones: with more than one show coming up, glide past the banner to them.
+    // Skipped on desktop, on #links, and if the visitor has already scrolled.
+    if (upcoming.length > 1 && !location.hash && matchMedia("(max-width: 699px)").matches) {
+      const smooth = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+      setTimeout(() => {
+        if (window.scrollY > 0) return;
+        document.getElementById("up-next").scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+      }, 500);
+    }
   };
 
   const showError = (msg) => {
